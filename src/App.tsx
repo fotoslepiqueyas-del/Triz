@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+// Imports das capas de clássicos do terror
 import capaPsycho from './assets/psycho.png';
 import capaShining from './assets/shining.png';
 import capaExorcista from './assets/exorcista.png';
@@ -7,7 +8,10 @@ import capaHalloween from './assets/halloween.png';
 import capaDracula from './assets/dracula.png';
 import capaAlien from './assets/alien.png';
 
+// Import da trilha sonora da raiz do projeto
 import audioTrilha from '../enya.mp3.mp3';
+
+/* ─── Types ─────────────────────────────────────────────────────────────── */
 
 type Screen = 'hero' | 'quiz' | 'diagnostic' | 'result' | 'dev-login' | 'dev-dashboard';
 type HorrorTier = 'novice' | 'enthusiast' | 'connoisseur' | 'master';
@@ -43,6 +47,8 @@ interface ParticipantRecord {
 }
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdTJhH0cNPc_3lryKA5GRjRoE4SYrUr5lN4ypBZLS6NZgX_TBJCpfaVW7PcSP3jwrq/exec';
+
+/* ─── Data: 16 Perguntas de Trivia de Clássicos de Terror ─────────────────── */
 
 const questions: Question[] = [
   {
@@ -528,4 +534,139 @@ function DevDashboardSection({ onBack, onSelectTier }: { onBack: () => void; onS
                   {errorMsg}
                 </p>
               ) : participants.length === 0 ? (
-                <p style={{ textAlign: 'center', fontStyle: 'italic', color: '#E0D8C7',
+                <p style={{ textAlign: 'center', fontStyle: 'italic', color: '#E0D8C7', padding: '1rem' }}>
+                  Nenhum registro encontrado na planilha.
+                </p>
+              ) : (
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontFamily: 'Georgia, serif', fontSize: '0.85rem' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid #D4AF37', color: '#D4AF37' }}>
+                      <th style={{ padding: '6px' }}>Nome</th>
+                      <th style={{ padding: '6px' }}>Nível / Desempenho</th>
+                      <th style={{ padding: '6px' }}>Data / Hora</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {participants.map((p, idx) => (
+                      <tr key={idx} style={{ borderBottom: '1px solid rgba(212,175,55,0.1)', color: '#F5F3E7' }}>
+                        <td style={{ padding: '6px', fontWeight: 'bold' }}>{p.name}</td>
+                        <td style={{ padding: '6px', color: '#E0D8C7' }}>{p.subgenre}</td>
+                        <td style={{ padding: '6px', fontSize: '0.75rem', opacity: 0.8 }}>{p.date || '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '1.5rem' }}>
+            <h3 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.1rem', marginBottom: '8px' }}>Testar Telas de Resultado por Nível:</h3>
+            <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.85rem', marginBottom: '12px' }}>
+              Clique em qualquer nível para abrir exatamente como ele aparece no fim do quiz:
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+              {tierKeys.map(key => {
+                const item = tierResults[key];
+                return (
+                  <button
+                    key={key}
+                    onClick={() => onSelectTier(key)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '10px 14px',
+                      background: 'rgba(0,0,0,0.5)',
+                      border: '1px solid rgba(212,175,55,0.5)',
+                      color: '#F5F3E7',
+                      cursor: 'pointer',
+                      fontFamily: 'Georgia, serif',
+                      fontSize: '0.9rem',
+                      textAlign: 'left',
+                      borderRadius: '4px',
+                      transition: 'background 0.2s',
+                    }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>{item.emblem}</span>
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+            <DiamondButton onClick={onBack} variant="secondary">Voltar ao Início</DiamondButton>
+          </div>
+        </ParchmentCard>
+      </div>
+    </main>
+  );
+}
+
+function QuizSection({ onComplete }: { onComplete: (tier: HorrorTier, name: string, score: number) => void }) {
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [name, setName] = useState('');
+  const [stepName, setStepName] = useState(true);
+  const [selectedOpt, setSelectedOpt] = useState<number | null>(null);
+
+  const q = questions[currentIdx];
+
+  const handleNameSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name.trim()) setStepName(false);
+  };
+
+  const handleSelectOption = (isCorrect: boolean, optIdx: number) => {
+    setSelectedOpt(optIdx);
+    
+    const newScore = isCorrect ? score + 1 : score;
+    setScore(newScore);
+
+    setTimeout(() => {
+      setSelectedOpt(null);
+      if (currentIdx + 1 < questions.length) {
+        setCurrentIdx(currentIdx + 1);
+      } else {
+        const finalTier = calculateTier(newScore);
+        onComplete(finalTier, name, newScore);
+      }
+    }, 900);
+  };
+
+  if (stepName) {
+    return (
+      <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+        <ParchmentCard style={{ maxWidth: '500px', width: '100%', textAlign: 'center' }}>
+          <Filigrana />
+          <h2 style={{ fontFamily: "Georgia, serif", color: '#D4AF37', fontSize: '1.8rem', margin: '1.2rem 0' }}>
+            Identifique-se, Cinéfilo(a)
+          </h2>
+          <GoldDivider glyph="✒️" />
+          <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+            Insira seu nome para que sua pontuação seja registrada na planilha.
+          </p>
+          <form onSubmit={handleNameSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="Seu nome ou alcunha..."
+              required
+              style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.5)', border: '1px solid #D4AF37', color: '#F5F3E7', borderRadius: '4px', fontFamily: 'Georgia, serif', fontSize: '1rem', textAlign: 'center' }}
+            />
+            <div style={{ marginTop: '1rem' }}>
+              <DiamondButton type="submit" variant="primary">Começar Quiz</DiamondButton>
+            </div>
+          </form>
+        </ParchmentCard>
+      </main>
+    );
+  }
+
+  return (
+    <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+      <div style={{ maxWidth: '650px', width: '100%' }}>
+        <div style={{ display
