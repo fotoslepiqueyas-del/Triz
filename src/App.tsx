@@ -5,8 +5,9 @@ import capaPsycho from './assets/psycho.png';
 import capaShining from './assets/shining.png';
 import capaExorcista from './assets/exorcista.png';
 import capaHalloween from './assets/halloween.png';
-import capaDracula from './assets/dracula.png';
-import capaAlien from './assets/alien.png';
+// Estes dois imports não eram usados e causam erro com "noUnusedLocals" no tsc:
+// import capaDracula from './assets/dracula.png';
+// import capaAlien from './assets/alien.png';
 
 // Import da trilha sonora da raiz do projeto
 import audioTrilha from '../enya.mp3.mp3';
@@ -46,7 +47,8 @@ interface ParticipantRecord {
   date?: string;
 }
 
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdTJhH0cNPc_3lryKA5GRjRoE4SYrUr5lN4ypBZLS6NZgX_TBJCpfaVW7PcSP3jwrq/exec';
+const GOOGLE_SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbzdTJhH0cNPc_3lryKA5GRjRoE4SYrUr5lN4ypBZLS6NZgX_TBJCpfaVW7PcSP3jwrq/exec';
 
 /* ─── Data: 16 Perguntas de Trivia de Clássicos de Terror ─────────────────── */
 
@@ -167,7 +169,7 @@ const questions: Question[] = [
     subtitle: 'O sinal inequívoco da perda total de sanidade',
     options: [
       { text: 'All work and no play makes Jack a dull boy', isCorrect: true },
-      { text: 'Heres Johnny!', isCorrect: false },
+      { text: "Here's Johnny!", isCorrect: false },
       { text: 'Redrum, redrum', isCorrect: false },
       { text: 'The horror of the snow', isCorrect: false },
     ],
@@ -221,7 +223,7 @@ const questions: Question[] = [
     question: 'Em "Frankenstein" (1931), qual é a famosa exclamação do cientista Henry Frankenstein ao dar vida à criatura?',
     subtitle: 'O momento supremo de desafio às leis divinas',
     options: [
-      { text: 'Its alive!', isCorrect: true },
+      { text: "It's alive!", isCorrect: true },
       { text: 'God forgive me!', isCorrect: false },
       { text: 'Science has triumphed!', isCorrect: false },
       { text: 'Live forever!', isCorrect: false },
@@ -233,7 +235,8 @@ const tierResults: Record<HorrorTier, TierResult> = {
   novice: {
     title: 'Espectador da Primeira Fileira',
     subtitle: 'Iniciando a descida às sombras do cinema',
-    description: 'Você conhece os nomes mais famosos e alguns sustos clássicos, mas ainda tem muito chão escuro para explorar até dominar os segredos do terror.',
+    description:
+      'Você conhece os nomes mais famosos e alguns sustos clássicos, mas ainda tem muito chão escuro para explorar até dominar os segredos do terror.',
     emblem: '🕯️',
     traits: ['Curioso', 'Cauteloso', 'Iniciante', 'Observador'],
     recommendedMasterpiece: 'Psicose (1960)',
@@ -244,7 +247,8 @@ const tierResults: Record<HorrorTier, TierResult> = {
   enthusiast: {
     title: 'Cinéfilo de Outubro',
     subtitle: 'Boa bagagem de clássicos e sangue frio',
-    description: 'Você conhece os principais monstros, diretores lendários e acerta boa parte das referências quando o assunto é suspense e horror.',
+    description:
+      'Você conhece os principais monstros, diretores lendários e acerta boa parte das referências quando o assunto é suspense e horror.',
     emblem: '🎃',
     traits: ['Dedicado', 'Atento', 'Entusiasta', 'Fascinado'],
     recommendedMasterpiece: 'Halloween: A Noite do Terror (1978)',
@@ -255,7 +259,8 @@ const tierResults: Record<HorrorTier, TierResult> = {
   connoisseur: {
     title: 'Connoisseur do Macabro',
     subtitle: 'Mente afiada para tramas e reviravoltas sombrias',
-    description: 'Você domina detalhes complexos, referências históricas e entende a genialidade por trás dos clássicos absolutos do gênero.',
+    description:
+      'Você domina detalhes complexos, referências históricas e entende a genialidade por trás dos clássicos absolutos do gênero.',
     emblem: '🦇',
     traits: ['Erudito', 'Sofisticado', 'Analítico', 'Misterioso'],
     recommendedMasterpiece: 'O Iluminado (1980)',
@@ -266,7 +271,8 @@ const tierResults: Record<HorrorTier, TierResult> = {
   master: {
     title: 'Oráculo do Horror Absoluto',
     subtitle: 'Autoridade suprema em clássicos e mitologia do terror',
-    description: 'Sua mente habita os recantos mais profundos da sétima arte. Você conhece cada plot twist, diretor, criatura e citação clássica do cinema de terror.',
+    description:
+      'Sua mente habita os recantos mais profundos da sétima arte. Você conhece cada plot twist, diretor, criatura e citação clássica do cinema de terror.',
     emblem: '👑',
     traits: ['Lendário', 'Inalcançável', 'Supremo', 'Onisciente'],
     recommendedMasterpiece: 'O Exorcista (1973)',
@@ -283,11 +289,19 @@ function calculateTier(correctCount: number): HorrorTier {
   return 'master';
 }
 
+/* ─── Componentes visuais ───────────────────────────────────────────────── */
+
 function Filigrana({ flip = false }: { flip?: boolean }) {
   return (
     <svg
       viewBox="0 0 420 56"
-      style={{ width: '100%', maxWidth: '350px', margin: '0 auto', transform: flip ? 'scaleY(-1)' : undefined, display: 'block' }}
+      style={{
+        width: '100%',
+        maxWidth: '350px',
+        margin: '0 auto',
+        transform: flip ? 'scaleY(-1)' : undefined,
+        display: 'block',
+      }}
       xmlns="http://www.w3.org/2000/svg"
     >
       <g stroke="#D4AF37" strokeWidth="0.8" fill="none">
@@ -340,7 +354,7 @@ function DiamondButton({
         justifyContent: 'center',
         background: s.bg,
         color: s.color,
-        fontFamily: "Georgia, serif",
+        fontFamily: 'Georgia, serif',
         fontSize: '1rem',
         fontWeight: 600,
         letterSpacing: '0.12em',
@@ -401,27 +415,76 @@ function ParchmentCard({ children, style = {} }: { children: React.ReactNode; st
   );
 }
 
+/* ─── Telas ─────────────────────────────────────────────────────────────── */
+
 function HeroSection({ onStart, onDevAccess }: { onStart: () => void; onDevAccess: () => void }) {
   return (
-    <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+    <main
+      style={{
+        background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}
+    >
       <ParchmentCard style={{ maxWidth: '600px', width: '100%', textAlign: 'center' }}>
         <Filigrana />
-        <h2 style={{ fontFamily: "Georgia, serif", color: '#D4AF37', fontSize: '2.4rem', margin: '1.2rem 0', textShadow: '0 2px 10px rgba(212,175,55,0.4)' }}>
+        <h2
+          style={{
+            fontFamily: 'Georgia, serif',
+            color: '#D4AF37',
+            fontSize: '2.4rem',
+            margin: '1.2rem 0',
+            textShadow: '0 2px 10px rgba(212,175,55,0.4)',
+          }}
+        >
           Quiz: O Quanto Você Sabe de Clássicos de Terror?
         </h2>
         <GoldDivider />
-        <p style={{ fontFamily: "Georgia, serif", fontStyle: 'italic', color: '#E0D8C7', fontSize: '1.15rem', margin: '1.5rem 0', lineHeight: 1.6 }}>
+        <p
+          style={{
+            fontFamily: 'Georgia, serif',
+            fontStyle: 'italic',
+            color: '#E0D8C7',
+            fontSize: '1.15rem',
+            margin: '1.5rem 0',
+            lineHeight: 1.6,
+          }}
+        >
           Responda às 16 perguntas de trivia cinematográfica e descubra o seu nível oficial de cinéfilo(a) de terror.
         </p>
         <Filigrana flip />
-        <div style={{ marginTop: '1.8rem', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
-          <DiamondButton onClick={onStart} variant="primary" wide>Iniciar Quiz</DiamondButton>
+        <div
+          style={{
+            marginTop: '1.8rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            alignItems: 'center',
+          }}
+        >
+          <DiamondButton onClick={onStart} variant="primary" wide>
+            Iniciar Quiz
+          </DiamondButton>
         </div>
       </ParchmentCard>
-      
-      <button 
+
+      <button
         onClick={onDevAccess}
-        style={{ background: 'transparent', border: 'none', color: '#D4AF37', marginTop: '1.5rem', fontFamily: 'Georgia, serif', fontSize: '0.85rem', cursor: 'pointer', opacity: 0.7, textDecoration: 'underline' }}
+        style={{
+          background: 'transparent',
+          border: 'none',
+          color: '#D4AF37',
+          marginTop: '1.5rem',
+          fontFamily: 'Georgia, serif',
+          fontSize: '0.85rem',
+          cursor: 'pointer',
+          opacity: 0.7,
+          textDecoration: 'underline',
+        }}
       >
         Acesso de Programadora (Participantes & Planilha)
       </button>
@@ -443,36 +506,84 @@ function DevLoginSection({ onLoginSuccess, onBack }: { onLoginSuccess: () => voi
   };
 
   return (
-    <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+    <main
+      style={{
+        background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}
+    >
       <ParchmentCard style={{ maxWidth: '450px', width: '100%', textAlign: 'center' }}>
         <Filigrana />
-        <h2 style={{ fontFamily: "Georgia, serif", color: '#D4AF37', fontSize: '1.8rem', margin: '1.2rem 0' }}>
+        <h2 style={{ fontFamily: 'Georgia, serif', color: '#D4AF37', fontSize: '1.8rem', margin: '1.2rem 0' }}>
           Painel da Programadora
         </h2>
         <GoldDivider glyph="🔒" />
         <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
           Digite a senha secreta para consultar os dados salvos na sua Planilha Google.
         </p>
-        
+
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '15px', textAlign: 'left' }}>
           <div>
-            <label style={{ display: 'block', color: '#D4AF37', fontSize: '0.85rem', marginBottom: '5px', fontFamily: 'Georgia, serif' }}>Senha de Acesso:</label>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={e => { setPassword(e.target.value); setError(false); }} 
+            <label
+              style={{
+                display: 'block',
+                color: '#D4AF37',
+                fontSize: '0.85rem',
+                marginBottom: '5px',
+                fontFamily: 'Georgia, serif',
+              }}
+            >
+              Senha de Acesso:
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={e => {
+                setPassword(e.target.value);
+                setError(false);
+              }}
               required
               placeholder="Digite a senha..."
-              style={{ width: '100%', padding: '10px', background: 'rgba(0,0,0,0.6)', border: '1px solid #D4AF37', color: '#F5F3E7', borderRadius: '4px', fontFamily: 'Georgia, serif' }}
+              style={{
+                width: '100%',
+                padding: '10px',
+                background: 'rgba(0,0,0,0.6)',
+                border: '1px solid #D4AF37',
+                color: '#F5F3E7',
+                borderRadius: '4px',
+                fontFamily: 'Georgia, serif',
+                boxSizing: 'border-box',
+              }}
             />
-            {error && <span style={{ color: '#ff6b6b', fontSize: '0.75rem', marginTop: '4px', display: 'block' }}>Senha incorreta. Tente novamente.</span>}
+            {error && (
+              <span style={{ color: '#ff6b6b', fontSize: '0.75rem', marginTop: '4px', display: 'block' }}>
+                Senha incorreta. Tente novamente.
+              </span>
+            )}
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem', gap: '10px' }}>
-            <DiamondButton type="submit" variant="primary">Entrar</DiamondButton>
+            <DiamondButton type="submit" variant="primary">
+              Entrar
+            </DiamondButton>
           </div>
         </form>
         <div style={{ marginTop: '1rem' }}>
-          <button onClick={onBack} style={{ background: 'none', border: 'none', color: '#E0D8C7', cursor: 'pointer', fontSize: '0.85rem', fontFamily: 'Georgia, serif', textDecoration: 'underline' }}>
+          <button
+            onClick={onBack}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#E0D8C7',
+              cursor: 'pointer',
+              fontSize: '0.85rem',
+              fontFamily: 'Georgia, serif',
+              textDecoration: 'underline',
+            }}
+          >
             Voltar ao Início
           </button>
         </div>
@@ -481,7 +592,13 @@ function DevLoginSection({ onLoginSuccess, onBack }: { onLoginSuccess: () => voi
   );
 }
 
-function DevDashboardSection({ onBack, onSelectTier }: { onBack: () => void; onSelectTier: (tier: HorrorTier) => void }) {
+function DevDashboardSection({
+  onBack,
+  onSelectTier,
+}: {
+  onBack: () => void;
+  onSelectTier: (tier: HorrorTier) => void;
+}) {
   const [participants, setParticipants] = useState<ParticipantRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
@@ -497,7 +614,7 @@ function DevDashboardSection({ onBack, onSelectTier }: { onBack: () => void; onS
         }
       })
       .catch(err => {
-        console.error("Erro ao carregar dados do Google Sheets:", err);
+        console.error('Erro ao carregar dados do Google Sheets:', err);
         setErrorMsg('Não foi possível conectar à planilha. Verifique a URL do Script.');
       })
       .finally(() => {
@@ -508,12 +625,20 @@ function DevDashboardSection({ onBack, onSelectTier }: { onBack: () => void; onS
   const tierKeys = Object.keys(tierResults) as HorrorTier[];
 
   return (
-    <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', padding: '3rem 1rem', display: 'flex', justifyContent: 'center' }}>
+    <main
+      style={{
+        background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)',
+        minHeight: '100vh',
+        padding: '3rem 1rem',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
       <div style={{ maxWidth: '850px', width: '100%' }}>
         <ParchmentCard>
           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
             <Filigrana />
-            <h2 style={{ fontFamily: "Georgia, serif", color: '#D4AF37', fontSize: '2rem', margin: '1rem 0' }}>
+            <h2 style={{ fontFamily: 'Georgia, serif', color: '#D4AF37', fontSize: '2rem', margin: '1rem 0' }}>
               Painel Dev: Registros & Níveis de Terror
             </h2>
             <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.9rem' }}>
@@ -523,22 +648,38 @@ function DevDashboardSection({ onBack, onSelectTier }: { onBack: () => void; onS
           </div>
 
           <div style={{ marginBottom: '2rem' }}>
-            <h3 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.1rem', marginBottom: '8px' }}>Participantes Registrados na Planilha:</h3>
-            <div style={{ maxHeight: '25vh', overflowY: 'auto', border: '1px solid rgba(212,175,55,0.3)', padding: '10px', background: 'rgba(0,0,0,0.4)' }}>
+            <h3 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.1rem', marginBottom: '8px' }}>
+              Participantes Registrados na Planilha:
+            </h3>
+            <div
+              style={{
+                maxHeight: '25vh',
+                overflowY: 'auto',
+                border: '1px solid rgba(212,175,55,0.3)',
+                padding: '10px',
+                background: 'rgba(0,0,0,0.4)',
+              }}
+            >
               {loading ? (
                 <p style={{ textAlign: 'center', fontStyle: 'italic', color: '#E0D8C7', padding: '1rem' }}>
                   Carregando registros da planilha...
                 </p>
               ) : errorMsg ? (
-                <p style={{ textAlign: 'center', color: '#ffb3b3', padding: '1rem' }}>
-                  {errorMsg}
-                </p>
+                <p style={{ textAlign: 'center', color: '#ffb3b3', padding: '1rem' }}>{errorMsg}</p>
               ) : participants.length === 0 ? (
                 <p style={{ textAlign: 'center', fontStyle: 'italic', color: '#E0D8C7', padding: '1rem' }}>
                   Nenhum registro encontrado na planilha.
                 </p>
               ) : (
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontFamily: 'Georgia, serif', fontSize: '0.85rem' }}>
+                <table
+                  style={{
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    textAlign: 'left',
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '0.85rem',
+                  }}
+                >
                   <thead>
                     <tr style={{ borderBottom: '1px solid #D4AF37', color: '#D4AF37' }}>
                       <th style={{ padding: '6px' }}>Nome</th>
@@ -561,7 +702,9 @@ function DevDashboardSection({ onBack, onSelectTier }: { onBack: () => void; onS
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
-            <h3 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.1rem', marginBottom: '8px' }}>Testar Telas de Resultado por Nível:</h3>
+            <h3 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.1rem', marginBottom: '8px' }}>
+              Testar Telas de Resultado por Nível:
+            </h3>
             <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.85rem', marginBottom: '12px' }}>
               Clique em qualquer nível para abrir exatamente como ele aparece no fim do quiz:
             </p>
@@ -589,7 +732,9 @@ function DevDashboardSection({ onBack, onSelectTier }: { onBack: () => void; onS
                     }}
                   >
                     <span style={{ fontSize: '1.2rem' }}>{item.emblem}</span>
-                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</span>
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {item.title}
+                    </span>
                   </button>
                 );
               })}
@@ -597,7 +742,9 @@ function DevDashboardSection({ onBack, onSelectTier }: { onBack: () => void; onS
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-            <DiamondButton onClick={onBack} variant="secondary">Voltar ao Início</DiamondButton>
+            <DiamondButton onClick={onBack} variant="secondary">
+              Voltar ao Início
+            </DiamondButton>
           </div>
         </ParchmentCard>
       </div>
@@ -620,8 +767,9 @@ function QuizSection({ onComplete }: { onComplete: (tier: HorrorTier, name: stri
   };
 
   const handleSelectOption = (isCorrect: boolean, optIdx: number) => {
+    if (selectedOpt !== null) return;
     setSelectedOpt(optIdx);
-    
+
     const newScore = isCorrect ? score + 1 : score;
     setScore(newScore);
 
@@ -631,17 +779,26 @@ function QuizSection({ onComplete }: { onComplete: (tier: HorrorTier, name: stri
         setCurrentIdx(currentIdx + 1);
       } else {
         const finalTier = calculateTier(newScore);
-        onComplete(finalTier, name, newScore);
+        onComplete(finalTier, name.trim(), newScore);
       }
     }, 900);
   };
 
   if (stepName) {
     return (
-      <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+      <main
+        style={{
+          background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem',
+        }}
+      >
         <ParchmentCard style={{ maxWidth: '500px', width: '100%', textAlign: 'center' }}>
           <Filigrana />
-          <h2 style={{ fontFamily: "Georgia, serif", color: '#D4AF37', fontSize: '1.8rem', margin: '1.2rem 0' }}>
+          <h2 style={{ fontFamily: 'Georgia, serif', color: '#D4AF37', fontSize: '1.8rem', margin: '1.2rem 0' }}>
             Identifique-se, Cinéfilo(a)
           </h2>
           <GoldDivider glyph="✒️" />
@@ -655,10 +812,23 @@ function QuizSection({ onComplete }: { onComplete: (tier: HorrorTier, name: stri
               onChange={e => setName(e.target.value)}
               placeholder="Seu nome ou alcunha..."
               required
-              style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.5)', border: '1px solid #D4AF37', color: '#F5F3E7', borderRadius: '4px', fontFamily: 'Georgia, serif', fontSize: '1rem', textAlign: 'center' }}
+              style={{
+                width: '100%',
+                padding: '12px',
+                background: 'rgba(0,0,0,0.5)',
+                border: '1px solid #D4AF37',
+                color: '#F5F3E7',
+                borderRadius: '4px',
+                fontFamily: 'Georgia, serif',
+                fontSize: '1rem',
+                textAlign: 'center',
+                boxSizing: 'border-box',
+              }}
             />
             <div style={{ marginTop: '1rem' }}>
-              <DiamondButton type="submit" variant="primary">Começar Quiz</DiamondButton>
+              <DiamondButton type="submit" variant="primary">
+                Começar Quiz
+              </DiamondButton>
             </div>
           </form>
         </ParchmentCard>
@@ -667,6 +837,270 @@ function QuizSection({ onComplete }: { onComplete: (tier: HorrorTier, name: stri
   }
 
   return (
-    <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+    <main
+      style={{
+        background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}
+    >
       <div style={{ maxWidth: '650px', width: '100%' }}>
-        <div style={{ display
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginBottom: '1rem',
+            color: '#D4AF37',
+            fontFamily: 'Georgia, serif',
+            fontSize: '0.9rem',
+          }}
+        >
+          <span>
+            Pergunta {currentIdx + 1} de {questions.length}
+          </span>
+          <span>Pontos: {score}</span>
+        </div>
+
+        <ParchmentCard>
+          <h2
+            style={{
+              fontFamily: 'Georgia, serif',
+              color: '#D4AF37',
+              fontSize: '1.4rem',
+              lineHeight: 1.4,
+              textAlign: 'center',
+            }}
+          >
+            {q.question}
+          </h2>
+          <p style={{ fontStyle: 'italic', color: '#E0D8C7', textAlign: 'center', fontSize: '0.9rem', margin: '0.5rem 0' }}>
+            {q.subtitle}
+          </p>
+          <GoldDivider />
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {q.options.map((opt, i) => {
+              const isSelected = selectedOpt === i;
+              const showResult = selectedOpt !== null;
+              let border = '1px solid rgba(212,175,55,0.5)';
+              let bg = 'rgba(0,0,0,0.5)';
+              if (showResult && opt.isCorrect) {
+                border = '1px solid #4caf50';
+                bg = 'rgba(76,175,80,0.2)';
+              } else if (isSelected && !opt.isCorrect) {
+                border = '1px solid #ff6b6b';
+                bg = 'rgba(255,107,107,0.2)';
+              }
+              return (
+                <button
+                  key={i}
+                  disabled={showResult}
+                  onClick={() => handleSelectOption(opt.isCorrect, i)}
+                  style={{
+                    padding: '12px 16px',
+                    background: bg,
+                    border,
+                    color: '#F5F3E7',
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '1rem',
+                    textAlign: 'left',
+                    borderRadius: '4px',
+                    cursor: showResult ? 'default' : 'pointer',
+                    transition: 'background 0.2s, border 0.2s',
+                  }}
+                >
+                  {opt.text}
+                </button>
+              );
+            })}
+          </div>
+        </ParchmentCard>
+      </div>
+    </main>
+  );
+}
+
+function DiagnosticSection({ name }: { name: string }) {
+  return (
+    <main
+      style={{
+        background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}
+    >
+      <ParchmentCard style={{ maxWidth: '500px', width: '100%', textAlign: 'center' }}>
+        <Filigrana />
+        <h2 style={{ fontFamily: 'Georgia, serif', color: '#D4AF37', fontSize: '1.6rem', margin: '1.2rem 0' }}>
+          Analisando o seu destino, {name}...
+        </h2>
+        <GoldDivider glyph="🕯️" />
+        <p style={{ fontStyle: 'italic', color: '#E0D8C7' }}>
+          As sombras estão revelando o seu nível de cinéfilo(a) de terror.
+        </p>
+      </ParchmentCard>
+    </main>
+  );
+}
+
+function ResultSection({
+  tier,
+  name,
+  score,
+  onRestart,
+}: {
+  tier: HorrorTier;
+  name: string;
+  score: number;
+  onRestart: () => void;
+}) {
+  const r = tierResults[tier];
+  return (
+    <main
+      style={{
+        background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}
+    >
+      <ParchmentCard style={{ maxWidth: '650px', width: '100%', textAlign: 'center' }}>
+        <Filigrana />
+        <div style={{ fontSize: '3rem', marginTop: '1rem' }}>{r.emblem}</div>
+        <h2 style={{ fontFamily: 'Georgia, serif', color: '#D4AF37', fontSize: '2rem', margin: '0.5rem 0' }}>
+          {r.title}
+        </h2>
+        <p style={{ fontStyle: 'italic', color: '#E0D8C7' }}>{r.subtitle}</p>
+        <GoldDivider />
+        <p style={{ color: '#F5F3E7', lineHeight: 1.6 }}>
+          {name}, você acertou <strong>{score}</strong> de {questions.length} perguntas.
+        </p>
+        <p style={{ color: '#E0D8C7', lineHeight: 1.6 }}>{r.description}</p>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', margin: '1rem 0' }}>
+          {r.traits.map(t => (
+            <span
+              key={t}
+              style={{
+                border: '1px solid #D4AF37',
+                color: '#D4AF37',
+                padding: '4px 12px',
+                fontSize: '0.8rem',
+                fontFamily: 'Georgia, serif',
+              }}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+
+        <GoldDivider glyph="🎬" />
+        <img
+          src={r.cover}
+          alt={r.recommendedMasterpiece}
+          style={{
+            maxWidth: '200px',
+            width: '100%',
+            border: '1px solid #D4AF37',
+            margin: '0.5rem auto',
+            display: 'block',
+          }}
+        />
+        <h3 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif' }}>{r.recommendedMasterpiece}</h3>
+        <p style={{ color: '#E0D8C7', fontSize: '0.9rem' }}>{r.synopsis}</p>
+        <p style={{ color: '#E0D8C7', fontSize: '0.8rem', fontStyle: 'italic' }}>Diretores: {r.directors}</p>
+
+        <Filigrana flip />
+        <div style={{ marginTop: '1.5rem' }}>
+          <DiamondButton onClick={onRestart} variant="primary">
+            Refazer Quiz
+          </DiamondButton>
+        </div>
+      </ParchmentCard>
+    </main>
+  );
+}
+
+/* ─── App principal ─────────────────────────────────────────────────────── */
+
+export default function App() {
+  const [screen, setScreen] = useState<Screen>('hero');
+  const [tier, setTier] = useState<HorrorTier>('novice');
+  const [playerName, setPlayerName] = useState('');
+  const [finalScore, setFinalScore] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio(audioTrilha);
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.4;
+    return () => {
+      audioRef.current?.pause();
+    };
+  }, []);
+
+  const startQuiz = () => {
+    audioRef.current?.play().catch(() => {});
+    setScreen('quiz');
+  };
+
+  const handleComplete = (t: HorrorTier, name: string, score: number) => {
+    setTier(t);
+    setPlayerName(name);
+    setFinalScore(score);
+    setScreen('diagnostic');
+
+    // Salva na planilha Google (sem esperar resposta)
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        name,
+        subgenre: `${tierResults[t].title} (${score}/${questions.length})`,
+      }),
+    }).catch(err => console.error('Erro ao salvar na planilha:', err));
+
+    setTimeout(() => setScreen('result'), 2500);
+  };
+
+  const restart = () => {
+    setScreen('hero');
+    setFinalScore(0);
+    setPlayerName('');
+  };
+
+  return (
+    <>
+      {screen === 'hero' && <HeroSection onStart={startQuiz} onDevAccess={() => setScreen('dev-login')} />}
+      {screen === 'quiz' && <QuizSection onComplete={handleComplete} />}
+      {screen === 'diagnostic' && <DiagnosticSection name={playerName} />}
+      {screen === 'result' && (
+        <ResultSection tier={tier} name={playerName} score={finalScore} onRestart={restart} />
+      )}
+      {screen === 'dev-login' && (
+        <DevLoginSection onLoginSuccess={() => setScreen('dev-dashboard')} onBack={() => setScreen('hero')} />
+      )}
+      {screen === 'dev-dashboard' && (
+        <DevDashboardSection
+          onBack={() => setScreen('hero')}
+          onSelectTier={t => {
+            setTier(t);
+            setPlayerName('Teste');
+            setFinalScore(0);
+            setScreen('result');
+          }}
+        />
+      )}
+    </>
+  );
+}
