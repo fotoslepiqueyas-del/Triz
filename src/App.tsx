@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-// Imports das capas de clássicos do terror (Certifique-se de ter esses arquivos em ./assets ou ajuste os caminhos)
+// Imports das capas de clássicos do terror
 import capaPsycho from './assets/psycho.png';
 import capaShining from './assets/shining.png';
 import capaExorcista from './assets/exorcista.png';
@@ -166,10 +166,10 @@ const questions: Question[] = [
     question: 'Em "O Iluminado", qual frase icônica Jack Torrance repete centenas de vezes datilografadas no papel?',
     subtitle: 'O sinal inequívoco da perda total de sanidade',
     options: [
-      { text: '"All work and no play makes Jack a dull boy"', isCorrect: true },
-      { text: '"Here’s Johnny! Let me in!"', isCorrect: false },
-      { text: '"Redrum, redrum, murder in the room"', isCorrect: false },
-      { text: '"The horror, the horror of the snow"', isCorrect: false },
+      { text: 'All work and no play makes Jack a dull boy', isCorrect: true },
+      { text: 'Here is Johnny! Let me in!', isCorrect: false },
+      { text: 'Redrum, redrum, murder in the room', isCorrect: false },
+      { text: 'The horror, the horror of the snow', isCorrect: false },
     ],
   },
   {
@@ -221,10 +221,10 @@ const questions: Question[] = [
     question: 'Em "Frankenstein" (1931), qual é a famosa exclamação do cientista Henry Frankenstein ao ver sua criatura ganhar vida?',
     subtitle: 'O momento supremo de desafio às leis divinas',
     options: [
-      { text: '"It’s alive! It’s alive!"', isCorrect: true },
-      { text: '"God forgive me for what I have done!"', isCorrect: false },
-      { text: '"The monster breathes! Science has triumphed!"', isCorrect: false },
-      { text: '"Born from lightning, live forever!"', isCorrect: false },
+      { text: 'Its alive! Its alive!', isCorrect: true },
+      { text: 'God forgive me for what I have done!', isCorrect: false },
+      { text: 'The monster breathes! Science has triumphed!', isCorrect: false },
+      { text: 'Born from lightning, live forever!', isCorrect: false },
     ],
   },
 ];
@@ -811,4 +811,128 @@ function ResultSection({ participantName, tier, score, onRestart, isDevPreview =
               />
             </div>
             <div>
-              <h4 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.
+              <h4 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.1rem', marginBottom: '0.4rem' }}>Obra Recomendada para Você:</h4>
+              <p style={{ fontFamily: 'Georgia, serif', fontSize: '1.15rem', fontWeight: 'bold', marginBottom: '0.6rem' }}>{info.recommendedMasterpiece}</p>
+              <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.9rem', marginBottom: '1.0rem', lineHeight: 1.5 }}>"{info.synopsis}"</p>
+              <h5 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '0.85rem', marginBottom: '0.2rem' }}>Mestres de Referência:</h5>
+              <p style={{ fontSize: '0.9rem', color: '#F5F3E7', opacity: 0.9 }}>{info.directors}</p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '2rem' }}>
+            {info.traits.map((trait, idx) => (
+              <span key={idx} style={{ background: 'rgba(212,175,55,0.15)', border: '1px solid #D4AF37', color: '#D4AF37', padding: '4px 12px', fontSize: '0.85rem', fontFamily: 'Georgia, serif', borderRadius: '2px' }}>
+                {trait}
+              </span>
+            ))}
+          </div>
+
+          {!isDevPreview && (
+            <div style={{ textAlign: 'center', fontSize: '0.85rem', fontStyle: 'italic', color: '#E0D8C7', marginBottom: '1.5rem' }}>
+              {saving ? 'Registrando seu resultado na planilha...' : saved ? '✦ Seu desempenho foi eternizado na planilha!' : ''}
+            </div>
+          )}
+
+          <div style={{ textAlign: 'center' }}>
+            <DiamondButton onClick={onRestart} variant="primary">
+              {isDevPreview ? 'Voltar ao Painel Dev' : 'Tentar Novamente'}
+            </DiamondButton>
+          </div>
+        </ParchmentCard>
+      </div>
+    </main>
+  );
+}
+
+export default function App() {
+  const [screen, setScreen] = useState<Screen>('hero');
+  const [participantName, setParticipantName] = useState('');
+  const [userTier, setUserTier] = useState<HorrorTier>('novice');
+  const [finalScore, setFinalScore] = useState(0);
+  const [isDevPreview, setIsDevPreview] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.4;
+      audioRef.current.play().catch(() => {
+        const handleFirstInteraction = () => {
+          audioRef.current?.play().catch(() => {});
+          window.removeEventListener('click', handleFirstInteraction);
+        };
+        window.addEventListener('click', handleFirstInteraction);
+      });
+    }
+  }, []);
+
+  const handleStartMusic = () => {
+    if (audioRef.current && audioRef.current.paused) {
+      audioRef.current.play().catch(() => {});
+    }
+    setScreen('quiz');
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const handleQuizComplete = (tier: HorrorTier, name: string, score: number) => {
+    setUserTier(tier);
+    setParticipantName(name);
+    setFinalScore(score);
+    setIsDevPreview(false);
+    setScreen('diagnostic');
+  };
+
+  const handleDevSelectTier = (tier: HorrorTier) => {
+    setUserTier(tier);
+    setParticipantName('Programadora');
+    setFinalScore(16);
+    setIsDevPreview(true);
+    setScreen('result');
+  };
+
+  return (
+    <>
+      <audio ref={audioRef} src={audioTrilha} loop preload="auto" />
+
+      <button
+        onClick={toggleMute}
+        title={isMuted ? "Ativar Trilha Sonora" : "Silenciar Trilha Sonora"}
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          zIndex: 9999,
+          background: 'rgba(18, 11, 14, 0.85)',
+          border: '1px solid #D4AF37',
+          color: '#D4AF37',
+          borderRadius: '50%',
+          width: '45px',
+          height: '45px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.5)',
+          fontSize: '1.2rem',
+          transition: 'transform 0.2s',
+        }}
+      >
+        {isMuted ? '🔇' : '🎵'}
+      </button>
+
+      {screen === 'hero' && <HeroSection onStart={handleStartMusic} onDevAccess={() => setScreen('dev-login')} />}
+      {screen === 'dev-login' && <DevLoginSection onLoginSuccess={() => setScreen('dev-dashboard')} onBack={() => setScreen('hero')} />}
+      {screen === 'dev-dashboard' && <DevDashboardSection onBack={() => setScreen('hero')} onSelectTier={handleDevSelectTier} />}
+      {screen === 'quiz' && <QuizSection onComplete={handleQuizComplete} />}
+      {screen === 'diagnostic' && <DiagnosticSection participantName={participantName} tier={userTier} score={finalScore} onNext={() => setScreen('result')} />}
+      {screen === 'result' && <ResultSection participantName={participantName} tier={userTier} score={finalScore} onRestart={() => isDevPreview ? setScreen('dev-dashboard') : setScreen('hero')} isDevPreview={isDevPreview} />}
+    </>
+  );
+}
