@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-// Imports das capas de clássicos do terror
+// Imports das capas de clássicos do terror (Certifique-se de ter esses arquivos em ./assets ou ajuste os caminhos)
 import capaPsycho from './assets/psycho.png';
 import capaShining from './assets/shining.png';
 import capaExorcista from './assets/exorcista.png';
@@ -42,7 +42,7 @@ interface TierResult {
 
 interface ParticipantRecord {
   name: string;
-  subgenre: string; // Mantido para compatibilidade com a planilha (registra o nível/pontuação)
+  subgenre: string;
   date?: string;
 }
 
@@ -640,7 +640,7 @@ function QuizSection({ onComplete }: { onComplete: (tier: HorrorTier, name: stri
         const finalTier = calculateTier(newScore);
         onComplete(finalTier, name, newScore);
       }
-    }, 900); // tempo para o usuário ver se acertou ou errou (feedback visual)
+    }, 900);
   };
 
   if (stepName) {
@@ -701,14 +701,13 @@ function QuizSection({ onComplete }: { onComplete: (tier: HorrorTier, name: stri
 
               if (isSelected) {
                 if (opt.isCorrect) {
-                  bgStyle = 'rgba(46, 125, 50, 0.7)'; // verde sucesso
+                  bgStyle = 'rgba(46, 125, 50, 0.7)';
                   borderStyle = '1px solid #4CAF50';
                 } else {
-                  bgStyle = 'rgba(183, 28, 28, 0.7)'; // vermelho erro
+                  bgStyle = 'rgba(183, 28, 28, 0.7)';
                   borderStyle = '1px solid #f44336';
                 }
               } else if (selectedOpt !== null && opt.isCorrect) {
-                // Se o usuário errou, destaca qual era a certa em verde suave
                 bgStyle = 'rgba(46, 125, 50, 0.4)';
                 borderStyle = '1px solid #4CAF50';
               }
@@ -781,7 +780,6 @@ function ResultSection({ participantName, tier, score, onRestart, isDevPreview =
   useEffect(() => {
     if (!saved && !saving && !isDevPreview) {
       setSaving(true);
-      // Salvando na planilha o nome e o nível/pontuação conquistada
       const recordTitle = `${info.title} (${score}/${questions.length} acertos)`;
       const params = new URLSearchParams({ name: participantName, subgenre: recordTitle });
       fetch(`${GOOGLE_SCRIPT_URL}?${params.toString()}`)
@@ -813,80 +811,4 @@ function ResultSection({ participantName, tier, score, onRestart, isDevPreview =
               />
             </div>
             <div>
-              <h4 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.1rem', marginBottom: '0.4rem' }}>Obra Recomendada para Você:</h4>
-              <p style={{ fontFamily: 'Georgia, serif', fontSize: '1.15rem', fontWeight: 'bold', marginBottom: '0.6rem' }}>{info.recommendedMasterpiece}</p>
-              <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.9rem', marginBottom: '1.0rem', lineHeight: 1.5 }}>"{info.synopsis}"</p>
-              <h5 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '0.85rem', marginBottom: '0.2rem' }}>Mestres de Referência:</h5>
-              <p style={{ fontSize: '0.9rem', color: '#F5F3E7', opacity: 0.9 }}>{info.directors}</p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '2rem' }}>
-            {info.traits.map((trait, idx) => (
-              <span key={idx} style={{ background: 'rgba(212,175,55,0.15)', border: '1px solid #D4AF37', color: '#D4AF37', padding: '4px 12px', fontSize: '0.85rem', fontFamily: 'Georgia, serif', borderRadius: '2px' }}>
-                {trait}
-              </span>
-            ))}
-          </div>
-
-          {!isDevPreview && (
-            <div style={{ textAlign: 'center', fontSize: '0.85rem', fontStyle: 'italic', color: '#E0D8C7', marginBottom: '1.5rem' }}>
-              {saving ? 'Registrando seu resultado na planilha...' : saved ? '✦ Seu desempenho foi eternizado na planilha!' : ''}
-            </div>
-          )}
-
-          <div style={{ textAlign: 'center' }}>
-            <DiamondButton onClick={onRestart} variant="primary">
-              {isDevPreview ? 'Voltar ao Painel Dev' : 'Tentar Novamente'}
-            </DiamondButton>
-          </div>
-        </ParchmentCard>
-      </div>
-    </main>
-  );
-}
-
-export default function App() {
-  const [screen, setScreen] = useState<Screen>('hero');
-  const [participantName, setParticipantName] = useState('');
-  const [userTier, setUserTier] = useState<HorrorTier>('novice');
-  const [finalScore, setFinalScore] = useState(0);
-  const [isDevPreview, setIsDevPreview] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-
-  // Referência para o elemento de áudio contínuo
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  // Tenta tocar a trilha sonora assim que o componente principal monta
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.4;
-      audioRef.current.play().catch(() => {
-        const handleFirstInteraction = () => {
-          audioRef.current?.play().catch(() => {});
-          window.removeEventListener('click', handleFirstInteraction);
-        };
-        window.addEventListener('click', handleFirstInteraction);
-      });
-    }
-  }, []);
-
-  const handleStartMusic = () => {
-    if (audioRef.current && audioRef.current.paused) {
-      audioRef.current.play().catch(() => {});
-    }
-    setScreen('quiz');
-  };
-
-  const toggleMute = () => {
-    if (audioRef.current) {
-      audioRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
-
-  const handleQuizComplete = (tier: HorrorTier, name: string, score: number) => {
-    setUserTier(tier);
-    setParticipantName(name);
-    setFinalScore(score);
-    setIsDevPreview(false);
+              <h4 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.
