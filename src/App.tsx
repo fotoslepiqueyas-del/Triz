@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-// Imports das capas de clássicos do terror
 import capaPsycho from './assets/psycho.png';
 import capaShining from './assets/shining.png';
 import capaExorcista from './assets/exorcista.png';
@@ -8,10 +7,7 @@ import capaHalloween from './assets/halloween.png';
 import capaDracula from './assets/dracula.png';
 import capaAlien from './assets/alien.png';
 
-// Import da trilha sonora da raiz do projeto
 import audioTrilha from '../enya.mp3.mp3';
-
-/* ─── Types ─────────────────────────────────────────────────────────────── */
 
 type Screen = 'hero' | 'quiz' | 'diagnostic' | 'result' | 'dev-login' | 'dev-dashboard';
 type HorrorTier = 'novice' | 'enthusiast' | 'connoisseur' | 'master';
@@ -48,8 +44,6 @@ interface ParticipantRecord {
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdTJhH0cNPc_3lryKA5GRjRoE4SYrUr5lN4ypBZLS6NZgX_TBJCpfaVW7PcSP3jwrq/exec';
 
-/* ─── Data: 16 Perguntas de Trivia de Clássicos de Terror ─────────────────── */
-
 const questions: Question[] = [
   {
     id: 1,
@@ -67,7 +61,7 @@ const questions: Question[] = [
     question: 'Qual é o número do quarto mal-assombrado no aterrorizante Hotel Overlook em "O Iluminado"?',
     subtitle: 'O quarto que Danny Torrance é avisado para jamais entrar',
     options: [
-      { text: 'Quarto 217 (no livro) / Quarto 237 (no filme)', isCorrect: true },
+      { text: 'Quarto 237', isCorrect: true },
       { text: 'Quarto 1408', isCorrect: false },
       { text: 'Quarto 666', isCorrect: false },
       { text: 'Quarto 313', isCorrect: false },
@@ -133,7 +127,7 @@ const questions: Question[] = [
     question: 'No clássico sci-fi/terror "Alien, o 8º Passageiro" (1979), quem é a heroína e oficial que enfrenta a criatura?',
     subtitle: 'A sobrevivente definitiva da nave Nostromo',
     options: [
-      { text: 'Ripley (interpretada por Sigourney Weaver)', isCorrect: true },
+      { text: 'Ripley', isCorrect: true },
       { text: 'Sarah Connor', isCorrect: false },
       { text: 'Clarice Starling', isCorrect: false },
       { text: 'Laurie Strode', isCorrect: false },
@@ -144,9 +138,9 @@ const questions: Question[] = [
     question: 'Em "A Noite dos Mortos-Vivos" (1968), de George A. Romero, qual criatura foi popularizada no cinema moderno?',
     subtitle: 'O marco zero do cinema de mortos-vivos contemporâneo',
     options: [
-      { text: 'Zumbis carnívoros reanimados por radiação/desconhecido', isCorrect: true },
+      { text: 'Zumbis carnívoros reanimados', isCorrect: true },
       { text: 'Vampiros clássicos sensíveis à luz solar', isCorrect: false },
-      { text: 'Múmias egípcias despertadas por escavações', isCorrect: false },
+      { text: 'Múmias egípcias despertadas', isCorrect: false },
       { text: 'Lobisomens ligados às fases da lua', isCorrect: false },
     ],
   },
@@ -167,9 +161,9 @@ const questions: Question[] = [
     subtitle: 'O sinal inequívoco da perda total de sanidade',
     options: [
       { text: 'All work and no play makes Jack a dull boy', isCorrect: true },
-      { text: 'Here is Johnny! Let me in!', isCorrect: false },
-      { text: 'Redrum, redrum, murder in the room', isCorrect: false },
-      { text: 'The horror, the horror of the snow', isCorrect: false },
+      { text: 'Heres Johnny!', isCorrect: false },
+      { text: 'Redrum, redrum', isCorrect: false },
+      { text: 'The horror of the snow', isCorrect: false },
     ],
   },
   {
@@ -178,14 +172,14 @@ const questions: Question[] = [
     subtitle: 'O parasita que destrói a confiança entre os cientistas',
     options: [
       { text: 'Assimilar e imitar perfeitamente a forma de qualquer ser vivo', isCorrect: true },
-      { text: 'Controlar a mente das vítimas através de telepatia à distância', isCorrect: false },
-      { text: 'Invisibilidade total e rajadas de energia térmica', isCorrect: false },
-      { text: 'Transformar humanos em estátuas de gelo instantâneas', isCorrect: false },
+      { text: 'Controlar a mente das vítimas à distância', isCorrect: false },
+      { text: 'Invisibilidade total', isCorrect: false },
+      { text: 'Transformar humanos em gelo', isCorrect: false },
     ],
   },
   {
     id: 13,
-    question: 'Qual filme de Dario Argento (1977) é o ápice do subgênero italiano Giallo e do terror estilizado em technicolor?',
+    question: 'Qual filme de Dario Argento (1977) é o ápice do subgênero italiano Giallo e do terror estilizado?',
     subtitle: 'A famosa academia de dança dominada por bruxas',
     options: [
       { text: 'Suspiria', isCorrect: true },
@@ -197,12 +191,12 @@ const questions: Question[] = [
   {
     id: 14,
     question: 'Em "O Silêncio dos Inocentes" (1991), qual é a profissão e especialidade de Hannibal Lecter antes de ser preso?',
-    subtitle: 'O brilhante psiquiatra e prisioneiro de segurança máxima',
+    subtitle: 'O brilhante prisioneiro de segurança máxima',
     options: [
-      { text: 'Psiquiatra e cirurgião talentoso (além de serial killer canibal)', isCorrect: true },
-      { text: 'Investigador forense da polícia de Baltimore', isCorrect: false },
-      { text: 'Professor universitário de literatura gótica', isCorrect: false },
-      { text: 'Agente duplo do FBI infiltrado', isCorrect: false },
+      { text: 'Psiquiatra e cirurgião talentoso', isCorrect: true },
+      { text: 'Investigador forense', isCorrect: false },
+      { text: 'Professor de literatura', isCorrect: false },
+      { text: 'Agente do FBI', isCorrect: false },
     ],
   },
   {
@@ -218,13 +212,13 @@ const questions: Question[] = [
   },
   {
     id: 16,
-    question: 'Em "Frankenstein" (1931), qual é a famosa exclamação do cientista Henry Frankenstein ao ver sua criatura ganhar vida?',
+    question: 'Em "Frankenstein" (1931), qual é a famosa exclamação do cientista Henry Frankenstein ao dar vida à criatura?',
     subtitle: 'O momento supremo de desafio às leis divinas',
     options: [
-      { text: 'Its alive! Its alive!', isCorrect: true },
-      { text: 'God forgive me for what I have done!', isCorrect: false },
-      { text: 'The monster breathes! Science has triumphed!', isCorrect: false },
-      { text: 'Born from lightning, live forever!', isCorrect: false },
+      { text: 'Its alive!', isCorrect: true },
+      { text: 'God forgive me!', isCorrect: false },
+      { text: 'Science has triumphed!', isCorrect: false },
+      { text: 'Live forever!', isCorrect: false },
     ],
   },
 ];
@@ -282,8 +276,6 @@ function calculateTier(correctCount: number): HorrorTier {
   if (correctCount <= 14) return 'connoisseur';
   return 'master';
 }
-
-/* ─── Componentes Visuais ─────────────────────────────────────────────────── */
 
 function Filigrana({ flip = false }: { flip?: boolean }) {
   return (
@@ -524,7 +516,6 @@ function DevDashboardSection({ onBack, onSelectTier }: { onBack: () => void; onS
             <GoldDivider glyph="📊" />
           </div>
 
-          {/* Tabela de Participantes */}
           <div style={{ marginBottom: '2rem' }}>
             <h3 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.1rem', marginBottom: '8px' }}>Participantes Registrados na Planilha:</h3>
             <div style={{ maxHeight: '25vh', overflowY: 'auto', border: '1px solid rgba(212,175,55,0.3)', padding: '10px', background: 'rgba(0,0,0,0.4)' }}>
@@ -537,402 +528,4 @@ function DevDashboardSection({ onBack, onSelectTier }: { onBack: () => void; onS
                   {errorMsg}
                 </p>
               ) : participants.length === 0 ? (
-                <p style={{ textAlign: 'center', fontStyle: 'italic', color: '#E0D8C7', padding: '1rem' }}>
-                  Nenhum registro encontrado na planilha.
-                </p>
-              ) : (
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontFamily: 'Georgia, serif', fontSize: '0.85rem' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '1px solid #D4AF37', color: '#D4AF37' }}>
-                      <th style={{ padding: '6px' }}>Nome</th>
-                      <th style={{ padding: '6px' }}>Nível / Desempenho</th>
-                      <th style={{ padding: '6px' }}>Data / Hora</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {participants.map((p, idx) => (
-                      <tr key={idx} style={{ borderBottom: '1px solid rgba(212,175,55,0.1)', color: '#F5F3E7' }}>
-                        <td style={{ padding: '6px', fontWeight: 'bold' }}>{p.name}</td>
-                        <td style={{ padding: '6px', color: '#E0D8C7' }}>{p.subgenre}</td>
-                        <td style={{ padding: '6px', fontSize: '0.75rem', opacity: 0.8 }}>{p.date || '—'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          </div>
-
-          {/* Lista de Níveis para Teste Rápido */}
-          <div style={{ marginBottom: '1.5rem' }}>
-            <h3 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.1rem', marginBottom: '8px' }}>Testar Telas de Resultado por Nível:</h3>
-            <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.85rem', marginBottom: '12px' }}>
-              Clique em qualquer nível para abrir exatamente como ele aparece no fim do quiz:
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
-              {tierKeys.map(key => {
-                const item = tierResults[key];
-                return (
-                  <button
-                    key={key}
-                    onClick={() => onSelectTier(key)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      padding: '10px 14px',
-                      background: 'rgba(0,0,0,0.5)',
-                      border: '1px solid rgba(212,175,55,0.5)',
-                      color: '#F5F3E7',
-                      cursor: 'pointer',
-                      fontFamily: 'Georgia, serif',
-                      fontSize: '0.9rem',
-                      textAlign: 'left',
-                      borderRadius: '4px',
-                      transition: 'background 0.2s',
-                    }}
-                  >
-                    <span style={{ fontSize: '1.2rem' }}>{item.emblem}</span>
-                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-            <DiamondButton onClick={onBack} variant="secondary">Voltar ao Início</DiamondButton>
-          </div>
-        </ParchmentCard>
-      </div>
-    </main>
-  );
-}
-
-function QuizSection({ onComplete }: { onComplete: (tier: HorrorTier, name: string, score: number) => void }) {
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [score, setScore] = useState(0);
-  const [name, setName] = useState('');
-  const [stepName, setStepName] = useState(true);
-  const [selectedOpt, setSelectedOpt] = useState<number | null>(null);
-  const [isCorrectOpt, setIsCorrectOpt] = useState<boolean | null>(null);
-
-  const q = questions[currentIdx];
-
-  const handleNameSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (name.trim()) setStepName(false);
-  };
-
-  const handleSelectOption = (isCorrect: boolean, optIdx: number) => {
-    setSelectedOpt(optIdx);
-    setIsCorrectOpt(isCorrect);
-    
-    const newScore = isCorrect ? score + 1 : score;
-    setScore(newScore);
-
-    setTimeout(() => {
-      setSelectedOpt(null);
-      setIsCorrectOpt(null);
-      if (currentIdx + 1 < questions.length) {
-        setCurrentIdx(currentIdx + 1);
-      } else {
-        const finalTier = calculateTier(newScore);
-        onComplete(finalTier, name, newScore);
-      }
-    }, 900);
-  };
-
-  if (stepName) {
-    return (
-      <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-        <ParchmentCard style={{ maxWidth: '500px', width: '100%', textAlign: 'center' }}>
-          <Filigrana />
-          <h2 style={{ fontFamily: "Georgia, serif", color: '#D4AF37', fontSize: '1.8rem', margin: '1.2rem 0' }}>
-            Identifique-se, Cinéfilo(a)
-          </h2>
-          <GoldDivider glyph="✒️" />
-          <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
-            Insira seu nome para que sua pontuação seja registrada na planilha.
-          </p>
-          <form onSubmit={handleNameSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            <input
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder="Seu nome ou alcunha..."
-              required
-              style={{ width: '100%', padding: '12px', background: 'rgba(0,0,0,0.5)', border: '1px solid #D4AF37', color: '#F5F3E7', borderRadius: '4px', fontFamily: 'Georgia, serif', fontSize: '1rem', textAlign: 'center' }}
-            />
-            <div style={{ marginTop: '1rem' }}>
-              <DiamondButton type="submit" variant="primary">Começar Quiz</DiamondButton>
-            </div>
-          </form>
-        </ParchmentCard>
-      </main>
-    );
-  }
-
-  return (
-    <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-      <div style={{ maxWidth: '650px', width: '100%' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#D4AF37', fontFamily: 'Georgia, serif', marginBottom: '0.8rem', fontSize: '0.9rem' }}>
-          <span>Participante: <strong>{name}</strong></span>
-          <span>Questão {currentIdx + 1} de {questions.length}</span>
-        </div>
-        <div style={{ width: '100%', height: '4px', background: 'rgba(212,175,55,0.2)', marginBottom: '1.5rem', borderRadius: '2px', overflow: 'hidden' }}>
-          <div style={{ width: `${((currentIdx + 1) / questions.length) * 100}%`, height: '100%', background: '#D4AF37', transition: 'width 0.3s ease' }} />
-        </div>
-
-        <ParchmentCard>
-          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <span style={{ fontSize: '1.8rem' }}>🎬</span>
-            <h2 style={{ fontFamily: "Georgia, serif", color: '#D4AF37', fontSize: '1.4rem', margin: '0.8rem 0 0.4rem 0', lineHeight: 1.4 }}>
-              {q.question}
-            </h2>
-            <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.9rem' }}>{q.subtitle}</p>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {q.options.map((opt, idx) => {
-              const isSelected = selectedOpt === idx;
-              let bgStyle = 'rgba(0,0,0,0.4)';
-              let borderStyle = '1px solid rgba(212,175,55,0.5)';
-
-              if (isSelected) {
-                if (opt.isCorrect) {
-                  bgStyle = 'rgba(46, 125, 50, 0.7)';
-                  borderStyle = '1px solid #4CAF50';
-                } else {
-                  bgStyle = 'rgba(183, 28, 28, 0.7)';
-                  borderStyle = '1px solid #f44336';
-                }
-              } else if (selectedOpt !== null && opt.isCorrect) {
-                bgStyle = 'rgba(46, 125, 50, 0.4)';
-                borderStyle = '1px solid #4CAF50';
-              }
-
-              return (
-                <button
-                  key={idx}
-                  disabled={selectedOpt !== null}
-                  onClick={() => handleSelectOption(opt.isCorrect, idx)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '15px',
-                    padding: '14px 18px',
-                    background: bgStyle,
-                    border: borderStyle,
-                    color: '#F5F3E7',
-                    textAlign: 'left',
-                    fontFamily: 'Georgia, serif',
-                    fontSize: '0.95rem',
-                    cursor: selectedOpt !== null ? 'default' : 'pointer',
-                    transition: 'all 0.2s ease',
-                    borderRadius: '4px',
-                  }}
-                >
-                  <span style={{ fontSize: '1.1rem', color: '#D4AF37', fontWeight: 'bold' }}>{String.fromCharCode(65 + idx)}.</span>
-                  <span>{opt.text}</span>
-                </button>
-              );
-            })}
-          </div>
-        </ParchmentCard>
-      </div>
-    </main>
-  );
-}
-
-function DiagnosticSection({ participantName, tier, score, onNext }: { participantName: string; tier: HorrorTier; score: number; onNext: () => void }) {
-  const info = tierResults[tier];
-
-  return (
-    <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-      <ParchmentCard style={{ maxWidth: '600px', width: '100%', textAlign: 'center' }}>
-        <Filigrana />
-        <h2 style={{ fontFamily: "Georgia, serif", color: '#D4AF37', fontSize: '2rem', margin: '1.2rem 0' }}>
-          Resultado de {participantName}
-        </h2>
-        <GoldDivider glyph={info.emblem} />
-        <div style={{ margin: '1.5rem 0' }}>
-          <span style={{ fontSize: '3rem', display: 'block', marginBottom: '0.5rem' }}>{info.emblem}</span>
-          <h3 style={{ fontFamily: 'Georgia, serif', color: '#D4AF37', fontSize: '1.6rem' }}>{info.title}</h3>
-          <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '1.05rem', marginTop: '0.3rem' }}>
-            Acertos: <strong>{score} de {questions.length}</strong>
-          </p>
-        </div>
-        <p style={{ fontFamily: 'Georgia, serif', color: '#F5F3E7', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2rem' }}>
-          {info.description}
-        </p>
-        <DiamondButton onClick={onNext} variant="primary">Ver Detalhes do Nível & Recomendação</DiamondButton>
-      </ParchmentCard>
-    </main>
-  );
-}
-
-function ResultSection({ participantName, tier, score, onRestart, isDevPreview = false }: { participantName: string; tier: HorrorTier; score: number; onRestart: () => void; isDevPreview?: boolean }) {
-  const info = tierResults[tier];
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(isDevPreview);
-
-  useEffect(() => {
-    if (!saved && !saving && !isDevPreview) {
-      setSaving(true);
-      const recordTitle = `${info.title} (${score}/${questions.length} acertos)`;
-      const params = new URLSearchParams({ name: participantName, subgenre: recordTitle });
-      fetch(`${GOOGLE_SCRIPT_URL}?${params.toString()}`)
-        .then(() => setSaved(true))
-        .catch(err => console.error("Erro ao salvar na planilha:", err))
-        .finally(() => setSaving(false));
-    }
-  }, [participantName, info.title, score, saved, saving, isDevPreview]);
-
-  return (
-    <main style={{ background: 'radial-gradient(circle at center, #1c060b 0%, #080607 100%)', minHeight: '100vh', padding: '3rem 1rem', display: 'flex', justifyContent: 'center' }}>
-      <div style={{ maxWidth: '750px', width: '100%' }}>
-        <ParchmentCard>
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <Filigrana />
-            <h2 style={{ fontFamily: 'Georgia, serif', color: '#D4AF37', fontSize: '2.2rem', margin: '1rem 0' }}>
-              {info.title} {isDevPreview && '(Modo de Visualização Dev)'}
-            </h2>
-            <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '1.1rem' }}>{info.subtitle} • {score}/{questions.length} acertos</p>
-            <GoldDivider glyph={info.emblem} />
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '2rem', alignItems: 'center', marginBottom: '2rem' }}>
-            <div style={{ textAlign: 'center' }}>
-              <img
-                src={info.cover}
-                alt={info.recommendedMasterpiece}
-                style={{ width: '100%', maxWidth: '200px', border: '2px solid #D4AF37', boxShadow: '0 8px 25px rgba(0,0,0,0.8)', borderRadius: '4px' }}
-              />
-            </div>
-            <div>
-              <h4 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '1.1rem', marginBottom: '0.4rem' }}>Obra Recomendada para Você:</h4>
-              <p style={{ fontFamily: 'Georgia, serif', fontSize: '1.15rem', fontWeight: 'bold', marginBottom: '0.6rem' }}>{info.recommendedMasterpiece}</p>
-              <p style={{ fontStyle: 'italic', color: '#E0D8C7', fontSize: '0.9rem', marginBottom: '1.0rem', lineHeight: 1.5 }}>"{info.synopsis}"</p>
-              <h5 style={{ color: '#D4AF37', fontFamily: 'Georgia, serif', fontSize: '0.85rem', marginBottom: '0.2rem' }}>Mestres de Referência:</h5>
-              <p style={{ fontSize: '0.9rem', color: '#F5F3E7', opacity: 0.9 }}>{info.directors}</p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '2rem' }}>
-            {info.traits.map((trait, idx) => (
-              <span key={idx} style={{ background: 'rgba(212,175,55,0.15)', border: '1px solid #D4AF37', color: '#D4AF37', padding: '4px 12px', fontSize: '0.85rem', fontFamily: 'Georgia, serif', borderRadius: '2px' }}>
-                {trait}
-              </span>
-            ))}
-          </div>
-
-          {!isDevPreview && (
-            <div style={{ textAlign: 'center', fontSize: '0.85rem', fontStyle: 'italic', color: '#E0D8C7', marginBottom: '1.5rem' }}>
-              {saving ? 'Registrando seu resultado na planilha...' : saved ? '✦ Seu desempenho foi eternizado na planilha!' : ''}
-            </div>
-          )}
-
-          <div style={{ textAlign: 'center' }}>
-            <DiamondButton onClick={onRestart} variant="primary">
-              {isDevPreview ? 'Voltar ao Painel Dev' : 'Tentar Novamente'}
-            </DiamondButton>
-          </div>
-        </ParchmentCard>
-      </div>
-    </main>
-  );
-}
-
-export default function App() {
-  const [screen, setScreen] = useState<Screen>('hero');
-  const [participantName, setParticipantName] = useState('');
-  const [userTier, setUserTier] = useState<HorrorTier>('novice');
-  const [finalScore, setFinalScore] = useState(0);
-  const [isDevPreview, setIsDevPreview] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.4;
-      audioRef.current.play().catch(() => {
-        const handleFirstInteraction = () => {
-          audioRef.current?.play().catch(() => {});
-          window.removeEventListener('click', handleFirstInteraction);
-        };
-        window.addEventListener('click', handleFirstInteraction);
-      });
-    }
-  }, []);
-
-  const handleStartMusic = () => {
-    if (audioRef.current && audioRef.current.paused) {
-      audioRef.current.play().catch(() => {});
-    }
-    setScreen('quiz');
-  };
-
-  const toggleMute = () => {
-    if (audioRef.current) {
-      audioRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
-
-  const handleQuizComplete = (tier: HorrorTier, name: string, score: number) => {
-    setUserTier(tier);
-    setParticipantName(name);
-    setFinalScore(score);
-    setIsDevPreview(false);
-    setScreen('diagnostic');
-  };
-
-  const handleDevSelectTier = (tier: HorrorTier) => {
-    setUserTier(tier);
-    setParticipantName('Programadora');
-    setFinalScore(16);
-    setIsDevPreview(true);
-    setScreen('result');
-  };
-
-  return (
-    <>
-      <audio ref={audioRef} src={audioTrilha} loop preload="auto" />
-
-      <button
-        onClick={toggleMute}
-        title={isMuted ? "Ativar Trilha Sonora" : "Silenciar Trilha Sonora"}
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          zIndex: 9999,
-          background: 'rgba(18, 11, 14, 0.85)',
-          border: '1px solid #D4AF37',
-          color: '#D4AF37',
-          borderRadius: '50%',
-          width: '45px',
-          height: '45px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          boxShadow: '0 4px 15px rgba(0,0,0,0.5)',
-          fontSize: '1.2rem',
-          transition: 'transform 0.2s',
-        }}
-      >
-        {isMuted ? '🔇' : '🎵'}
-      </button>
-
-      {screen === 'hero' && <HeroSection onStart={handleStartMusic} onDevAccess={() => setScreen('dev-login')} />}
-      {screen === 'dev-login' && <DevLoginSection onLoginSuccess={() => setScreen('dev-dashboard')} onBack={() => setScreen('hero')} />}
-      {screen === 'dev-dashboard' && <DevDashboardSection onBack={() => setScreen('hero')} onSelectTier={handleDevSelectTier} />}
-      {screen === 'quiz' && <QuizSection onComplete={handleQuizComplete} />}
-      {screen === 'diagnostic' && <DiagnosticSection participantName={participantName} tier={userTier} score={finalScore} onNext={() => setScreen('result')} />}
-      {screen === 'result' && <ResultSection participantName={participantName} tier={userTier} score={finalScore} onRestart={() => isDevPreview ? setScreen('dev-dashboard') : setScreen('hero')} isDevPreview={isDevPreview} />}
-    </>
-  );
-}
+                <p style={{ textAlign: 'center', fontStyle: 'italic', color: '#E0D8C7',
